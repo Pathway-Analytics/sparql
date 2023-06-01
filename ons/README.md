@@ -1,6 +1,6 @@
 .sparqlbook files are best read using the [SPARQL Notebook](https://marketplace.visualstudio.com/items?itemName=Zazuko.sparql-notebook) extension in [VS Code](https://code.visualstudio.com/download): 
 
-1. Download [VS Code](https://code.visualstudio.com/download)
+1. Download [VS Code](https://code.visualstudio.com/download) and install
 2. Clone this repo: 
 
 ```bash

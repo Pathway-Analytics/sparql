@@ -53,5 +53,10 @@
     "kind": 1,
     "language": "markdown",
     "value": "That doesn't necessarily give you the full hierarchy but is simple and hopefully useful.\n\nThanks to Bill Roberts at swirl.com](https://swirl.com)"
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "### Postcodes \nThe postcodes are memberOf <http://statistics.data.gov.uk/def/geography/collection/postcodes>\nand they have within relationships to various other areas including LSOAs\n\nThere is an example at https://statistics.data.gov.uk/atlas/resource?uri=http://statistics.data.gov.uk/id/postcode/unit/EC2Y8DR&includeObsolete=false  \nOpen up the Linked Data section near the bottom of the page, you can see the details of all the properties we hold for postcodes - there are lots of lookups to other areas, as well as coordinates of the centroids etc.  The postcode data comes from the National Statistics Postcode Lookup dataset from ONS.\n\nProbably based on best fit of the postcode area to 2011 output areas, the output area lookups to other larger areas for the other postcode --> other area relationships"
   }
 ]

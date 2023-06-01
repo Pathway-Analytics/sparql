@@ -44,4 +44,4 @@ So, to determine if an LSOA is live we need to know that the highest-number code
 
 - 
 
-Thanks for contributions from : Bill Roberts, [swirl.com](https://swirl.com)
+Thanks for contributions from : [Bill Roberts](mailto:bill.roberts@tpximpact.com), [txpimpact.com](https://www.tpximpact.com)

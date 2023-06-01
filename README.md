@@ -33,22 +33,23 @@ LSOA prior to 2021 rely on `OperativeDate` and `TerminatedDate`
 
 However, some codes such as `E01000147` were introduced as a result of the 2001 census but have since had some property changes, leading to the OperativeDate being updated.  If the geometrical boundary changes, then a new code is always issued, but occasionally other non-essential properties are changed without replacing the code.
 
-When an LSOA entity is recorded as Terminated with TerminatedDate or status of `terminated`, there is no consistent method in the data to indicate the new LSOA entity or entities that have adopted the old entiies population.  One terminated LSOA may be superceded by a number of new LSOA. Without inspecting the data (ie looking at the location the of the items covered by the old LSOA) it is not always possible to determine which new LSOA should be adopted in its place - it might be one of a number.
+When an LSOA entity is recorded as Terminated with `TerminatedDate` date or status of `terminated`, there is no consistent method in the data to indicate the new LSOA entity nor of the entities that have adopted the old entity's population.  One terminated LSOA may be superceded by a number of new LSOA. Without inspecting the data (ie looking at the location the of the items covered by the old LSOA) it is not always possible to determine which new LSOA should be adopted in its place - it might be one of a number.
 
-So, to determine if an LSOA is `live` we need to know that the highest-number code of LSOA used before the 2021 census was `E01033768` all subsequent codes will have a status of `live` or `terminated` all prior codes will not have a `TerminatedDate`.
+### E01033768
+So, to determine if an LSOA is `live` we need to know that the highest-number code of LSOA used before the 2021 census was `E01033768`, all subsequent codes will have a status of `live` or `terminated` all prior codes will not have a `TerminatedDate`.
 
 When reviewing the LSOA data entities, there is no identifier that determines if an LSOA entity is derived from 2001, 2011 or 2021 census (known as  LSOA01, LSOA11, LSOA21), the collection of live LSOA codes covering England and Wales is made up of current live LSOA that may have originated from the 2001, 2011 or 2021 census, some LSOA01 and LSOA11 codes were used in the 2021 census and some were terminated and replaced.
 
 ## Replicated Data
-Many organisations publish LSOA data; their data may come from other third party organisations or direct from the ONS.  The ONS offers csv data files for download as well as an API endpoint that can be used in machine to machine data transfer using the SPQARL query language .  Data consistency between data suppliers can be an issue, even different data sources managed by the ONS offer different versions where LSOA may be available in one and not another.  Other government departments also replicate the delivery of LSOA data, such as the Department for Levelling Up, Housing and Communities that replicate the ONS and administrative geographical data, closely based on the ONS geographies, but currently out of date.
+A note of caution: many organisations publish LSOA data and their data may come from other third party organisations or direct from the ONS.  The ONS also offers csv data files for download as well as an API endpoint that can be used in machine to machine data transfer using the SPQARL query language.  Data consistency between data suppliers can be an issue, even different data sources managed by the ONS offer different versions where an LSOA may be available in one and not another.  Other government departments also replicate the LSOA data, such as the Department for Levelling Up, Housing and Communities.  Their data is closely based on the ONS geographies, but currently (May 2023) out of date.
 
 
 # Postcodes 
-The postcodes are `memberOf` <http://statistics.data.gov.uk/def/geography/collection/postcodes>
-and they have within relationships to various other areas including LSOAs
+The postcodes are `memberOf` the collection <http://statistics.data.gov.uk/def/geography/collection/postcodes>
+and they have `within` relationships to various other areas including LSOAs
 
-There is an example at https://statistics.data.gov.uk/atlas/resource?uri=http://statistics.data.gov.uk/id/postcode/unit/EC2Y8DR&includeObsolete=false  
-Open up the Linked Data section near the bottom of the page, you can see the details of all the properties we hold for postcodes - there are lots of lookups to other areas, as well as coordinates of the centroids etc.  The postcode data comes from the National Statistics Postcode Lookup dataset from ONS.
+Here is an example: https://statistics.data.gov.uk/atlas/resource?uri=http://statistics.data.gov.uk/id/postcode/unit/EC2Y8DR&includeObsolete=false  
+Open up the Linked Data section near the bottom of the page to see the details of all the properties held for this postcode - there are lots of lookups to other areas, as well as coordinates of the centroids etc.  The postcode data comes from the National Statistics Postcode Lookup dataset from ONS.
 
 Probably based on best fit of the postcode area to 2011 output areas, the output area lookups to other larger areas for the other postcode --> other area relationships
 

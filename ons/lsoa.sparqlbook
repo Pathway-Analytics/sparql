@@ -1,0 +1,57 @@
+[
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "## Finding LSOAs\nUsing the SPARQL endpoint at https://statistics.data.gov.uk/sparql\n\nA common aim is to easily access the set of LSOAs from the 2011 or 2021 census collections - unfortunately the way the data is currently structured, it's not entirely straightforward.\n\nEach area has a status (\nhttp://statistics.data.gov.uk/def/statistical-geography#status) which can be 'live' or 'terminated'.\n\nThe complicating factor is that some LSOAs have been used in more than one census set, whereas others have been terminated and replaced.\n\nThe 2021 LSOAs are all those with status=live so easy to find:"
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "# [endpoint=https://statistics.data.gov.uk/sparql]\nSELECT ?lsoa\nWHERE {\n  ?lsoa <http://statistics.data.gov.uk/def/statistical-entity#code> <http://statistics.data.gov.uk/id/statistical-entity/E01> ;\n        <http://statistics.data.gov.uk/def/statistical-geography#status> 'live'.\n}\nLIMIT 5\n"
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "But the 2011 census is more complicated.  \n\nEach area in the system has an 'Operative Date' property (\nhttp://statistics.data.gov.uk/def/boundary-change/operativedate) when it was registered.  \n\nIf it is terminated then it has a 'Terminated Date' property (http://statistics.data.gov.uk/def/boundary-change/terminateddate)\n\nThe earliest set of LSOAs, for the 2001 census, have a value of Operative Date of http://reference.data.gov.uk/id/day/2004-02-01\n\nThen new LSOAs were introduced on\nhttp://reference.data.gov.uk/id/day/2011-12-31\nor\nhttp://reference.data.gov.uk/id/day/2021-03-21\n\nPossible values of terminated date are\n\nhttp://reference.data.gov.uk/id/day/2021-03-20\nor\nhttp://reference.data.gov.uk/id/day/2011-12-30\n\nHowever there is a problem with using these - there are some codes (eg E01000147) which have been in use since the 2001 census but have since had some property of them changed, leading to the Operative Date being updated.  If the geometrical boundary changes, then a new code is always issued, but occasionally other non-essential properties are changed without replacing the code.\n\nSo the only way to do it with the information currently held in statistics.data.gov.uk is to include the knowledge that the highest-number code of LSOA used in 2011 was E01033768\n\nSo this query finds all the codes with numbers up to that one, but excluding those which were terminated at the time the 2011 census codes were defined."
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "# [endpoint=https://statistics.data.gov.uk/sparql]\nSELECT ?lsoa\nWHERE {\n \n    ?lsoa <http://statistics.data.gov.uk/def/statistical-entity#code> <http://statistics.data.gov.uk/id/statistical-entity/E01> ;  \n         <http://www.w3.org/2004/02/skos/core#notation> ?code .\n  OPTIONAL {?lsoa <http://statistics.data.gov.uk/def/boundary-change/terminateddate> ?terminated}\n  FILTER (?code <= \"E01033768\")\n  FILTER (?terminated != <http://reference.data.gov.uk/id/day/2011-12-30>)\n}\nLIMIT 5"
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "## LSOAs within a Heirarchy\nEach area is grouped into a 'collection', based on the code series, eg E01, E06 etc.\n\nThe area is linked to the collection by the <http://publishmydata.com/def/ontology/foi/memberOf> property\n\nAlso there are 'within' relationships from smaller areas to bigger areas.  This isn't completly comprehensive but has some of the most commonly used relations.  That uses <http://publishmydata.com/def/ontology/foi/within>\n\nA complication with LADs is that they are split into 4 different series:\n\nE06 - unitary authorities\nE07 - non-metropolitan districts\nE08 - metropolitan districts\nE09 - London Boroughs\n\n### LAD For each LSOA\nThis query will return the LAD for each LSOA, checking for each of the four types of LAD in England.  (You could do a similar query for Wales, using W01 and W06)"
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "# [endpoint=https://statistics.data.gov.uk/sparql]\nselect ?lsoa ?lad where {\n\n?lsoa <http://publishmydata.com/def/ontology/foi/memberOf> <http://statistics.data.gov.uk/def/geography/collection/E01> ;\n<http://publishmydata.com/def/ontology/foi/within> ?lad .\n?lad <http://publishmydata.com/def/ontology/foi/memberOf> ?lad_collection .\nFILTER (?lad_collection = <http://statistics.data.gov.uk/def/geography/collection/E06> ||\n?lad_collection = <http://statistics.data.gov.uk/def/geography/collection/E07> ||\n?lad_collection = <http://statistics.data.gov.uk/def/geography/collection/E08> ||\n?lad_collection = <http://statistics.data.gov.uk/def/geography/collection/E09> )\n} ORDER BY ?lsoa\nLIMIT 3"
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "### LSOAs for a LAD\nOr in the other direction for an example LAD, in this case City of Bristol..."
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "# [endpoint=https://statistics.data.gov.uk/sparql]\nselect ?lsoa where {\n?lsoa <http://publishmydata.com/def/ontology/foi/memberOf> <http://statistics.data.gov.uk/def/geography/collection/E01> ;\n<http://publishmydata.com/def/ontology/foi/within> <http://statistics.data.gov.uk/id/statistical-geography/E06000023> }\n\nLIMIT 5"
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "### LSOA Parent Heirarcy\nTo get all of the available 'within' relations from an LSOA, picking a single LSOA this time:"
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "# [endpoint=https://statistics.data.gov.uk/sparql]\nselect ?containing_area ?collection_name where {\n<http://statistics.data.gov.uk/id/statistical-geography/E01014485> <http://publishmydata.com/def/ontology/foi/within> ?containing_area .\n?containing_area  <http://publishmydata.com/def/ontology/foi/memberOf> ?collection .\n?collection <http://www.w3.org/2000/01/rdf-schema#label> ?collection_name\n}\nLIMIT 5"
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "That doesn't necessarily give you the full hierarchy but is simple and hopefully useful.\n\nThanks to Bill Roberts at swirl.com](https://swirl.com)"
+  }
+]

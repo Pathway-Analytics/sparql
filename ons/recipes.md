@@ -5,7 +5,7 @@ Using this endpoint https://statistics.data.gov.uk/sparql-beta
 ## Find an LSOA and Its Parents
 
 ```sparql
-SELECT ?link ?code ?name ?status ?within
+SELECT * 
  WHERE { 
   
    VALUES ?item {'E01034155'}
@@ -24,7 +24,7 @@ SELECT ?link ?code ?name ?status ?within
 ## Find the Children Of...
  
 ```sparql
-SELECT ?link ?code ?name ?status ?within
+SELECT *
  WHERE { 
   
    VALUES ?within {'E07000213'}

@@ -4,6 +4,7 @@ Using this endpoint https://statistics.data.gov.uk/sparql-beta
 
 ## Find an LSOA and Its Parents
 
+```sparql
 SELECT ?link ?code ?name ?status ?within
  WHERE { 
   
@@ -18,9 +19,11 @@ SELECT ?link ?code ?name ?status ?within
 
      FILTER (?status = "live")
  }
+```
 
 ## Find the Children Of...
  
+```sparql
 SELECT ?link ?code ?name ?status ?within
  WHERE { 
   
@@ -35,3 +38,4 @@ SELECT ?link ?code ?name ?status ?within
 
      FILTER (?status = "live")
  }
+```
